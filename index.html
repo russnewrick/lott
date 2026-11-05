@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Generate random numbers for UK lottery games including EuroMillions, Lotto, Thunderball and Set For Life. Free, simple and for entertainment only.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#102a43">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="UK Lottery Number Generator | Number Studio">
+    <meta property="og:description" content="Generate random numbers for popular UK lottery games. Free to use and for entertainment only.">
+    <meta name="twitter:card" content="summary">
+    <title>UK Lottery Number Generator | Number Studio</title>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "UK Lottery Number Generator",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Any",
+        "description": "A free random number generator for UK lottery games, provided for entertainment only."
+    }
+    </script>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #102a43;
+            --muted: #627d98;
+            --line: #d9e2ec;
+            --surface: #ffffff;
+            --canvas: #f3f7fb;
+            --brand: #176b87;
+            --brand-dark: #11546b;
+            --accent: #f2b84b;
+            --shadow: 0 16px 44px rgba(16, 42, 67, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.55;
+        }
+
+        button, select { font: inherit; }
+        button:focus-visible, select:focus-visible {
+            outline: 3px solid rgba(23, 107, 135, 0.35);
+            outline-offset: 3px;
+        }
+
+        .site-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header-inner, .page-shell, .site-footer {
+            width: min(1160px, calc(100% - 40px));
+            margin-inline: auto;
+        }
+
+        .header-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--ink);
+            font-size: 19px;
+            font-weight: 750;
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--brand);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .country-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .country-switcher label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .country-flag {
+            display: block;
+            width: 36px;
+            height: 24px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .country-switcher select {
+            min-height: 42px;
+            max-width: 220px;
+            padding: 8px 34px 8px 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: white;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .page-shell { padding-block: 38px 54px; }
+
+        .intro { margin-bottom: 24px; }
+        .eyebrow {
+            margin: 0 0 6px;
+            color: var(--brand);
+            font-size: 12px;
+            font-weight: 750;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
+        h1 {
+            margin-bottom: 8px;
+            font-size: clamp(28px, 4vw, 40px);
+            line-height: 1.15;
+            letter-spacing: -0.045em;
+        }
+
+        .intro p:last-child {
+            max-width: 680px;
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .game-nav { padding: 20px; }
+        .game-nav h2 {
+            margin-bottom: 4px;
+            font-size: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .game-nav > p {
+            margin-bottom: 17px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .game-menu { display: grid; gap: 7px; }
+        .game-item {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            background: transparent;
+            color: #334e68;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 620;
+            cursor: pointer;
+            transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+        }
+
+        .game-item:hover { background: #f0f7fa; }
+        .game-item.active {
+            border-color: #c5e1e9;
+            background: #eaf5f8;
+            color: var(--brand-dark);
+        }
+
+        .generator { padding: clamp(20px, 3vw, 32px); }
+        .generator-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .generator-heading h2 {
+            margin-bottom: 4px;
+            font-size: 23px;
+            letter-spacing: -0.035em;
+        }
+
+        .generator-heading p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .info-box {
+            margin-bottom: 22px;
+            padding: 12px 14px;
+            border-left: 3px solid var(--accent);
+            border-radius: 4px 9px 9px 4px;
+            background: #fff9eb;
+            color: #654c1d;
+            font-size: 14px;
+        }
+
+        .pick-count { margin: -5px 0 20px; }
+        .pick-count.hidden { display: none; }
+        .pick-count label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .pick-count select {
+            min-height: 42px;
+            padding: 8px 32px 8px 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: white;
+            color: var(--ink);
+        }
+
+        .actions { display: flex; gap: 10px; margin-bottom: 22px; }
+        .action-button {
+            min-height: 46px;
+            padding: 11px 17px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 150ms ease, transform 150ms ease;
+        }
+
+        .action-button:hover { transform: translateY(-1px); }
+        .generate-button {
+            border-color: var(--brand);
+            background: var(--brand);
+            color: white;
+        }
+        .generate-button:hover { background: var(--brand-dark); }
+        .clear-button { background: white; color: #334e68; }
+        .clear-button:hover { background: #f5f8fb; }
+
+        .ticket {
+            margin-bottom: 18px;
+            padding: 20px;
+            border: 1px solid #d9e7ed;
+            border-radius: 13px;
+            background: linear-gradient(145deg, #f8fbfc, #eff6f8);
+        }
+
+        .ticket-label, .section-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .ticket-label { margin-bottom: 16px; }
+        .number-section + .number-section { margin-top: 17px; }
+        .section-label { margin-bottom: 9px; }
+        .numbers-display { display: flex; flex-wrap: wrap; gap: 9px; }
+
+        .number-ball, .bonus-ball, .empty-ball {
+            display: grid;
+            width: 46px;
+            height: 46px;
+            flex: 0 0 46px;
+            place-items: center;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 750;
+        }
+        .number-ball {
+            border: 1px solid #d9e2ec;
+            background: white;
+            color: var(--ink);
+            box-shadow: 0 2px 5px rgba(16, 42, 67, 0.07);
+        }
+        .bonus-ball { background: var(--accent); color: #513a0b; }
+        .empty-ball {
+            border: 1px dashed #a9bdcc;
+            background: rgba(255, 255, 255, 0.7);
+            color: #829ab1;
+        }
+
+        .history { padding-top: 18px; border-top: 1px solid var(--line); }
+        .history h3 { margin-bottom: 11px; font-size: 14px; }
+        .history-list {
+            display: grid;
+            gap: 8px;
+            max-height: 205px;
+            overflow-y: auto;
+        }
+        .history-empty { color: var(--muted); font-size: 13px; }
+        .history-item {
+            padding: 10px 12px;
+            border: 1px solid #e6edf2;
+            border-radius: 8px;
+            background: #fbfdfe;
+            color: #334e68;
+            font-size: 13px;
+        }
+        .history-item strong { color: var(--ink); }
+        .history-date { color: var(--muted); font-size: 11px; }
+
+        .editorial {
+            margin-top: 24px;
+            padding: clamp(20px, 3vw, 30px);
+        }
+        .editorial h2 {
+            margin-bottom: 8px;
+            font-size: 20px;
+            letter-spacing: -0.025em;
+        }
+        .editorial p { max-width: 850px; margin-bottom: 12px; color: #486581; }
+        .editorial p:last-child { margin-bottom: 0; }
+        .responsible-play {
+            margin-top: 16px !important;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-size: 13px;
+        }
+
+        .site-footer {
+            padding-block: 20px 28px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 760px) {
+            .workspace { grid-template-columns: 1fr; }
+            .game-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .game-nav { padding: 17px; }
+        }
+
+        @media (max-width: 520px) {
+            .header-inner, .page-shell, .site-footer { width: min(100% - 28px, 1160px); }
+            .header-inner { min-height: 68px; gap: 12px; }
+            .brand { font-size: 17px; }
+            .country-switcher { gap: 6px; }
+            .country-switcher label { display: none; }
+            .country-switcher select { max-width: 170px; min-height: 40px; font-size: 13px; }
+            .country-flag { width: 30px; height: 21px; }
+            .page-shell { padding-top: 27px; }
+            .game-menu { grid-template-columns: 1fr 1fr; }
+            .game-item { padding-inline: 9px; font-size: 12px; }
+            .actions { flex-direction: column; }
+            .action-button { width: 100%; }
+            .generator-heading h2 { font-size: 21px; }
+            .number-ball, .bonus-ball, .empty-ball { width: 42px; height: 42px; flex-basis: 42px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="uk-lottery-number-generator.html" aria-label="Number Studio UK Lottery Number Generator home">
+                <span class="brand-mark" aria-hidden="true">N</span>
+                <span>Number Studio</span>
+            </a>
+            <div class="country-switcher">
+                <label for="countrySelect">Region</label>
+                <img class="country-flag" src="uk-flag.svg" alt="United Kingdom flag" width="60" height="30">
+                <select id="countrySelect" aria-label="Choose country">
+                    <option value="uk-lottery-number-generator.html" selected>🇬🇧 United Kingdom</option>
+                    <option value="us-lottery-number-generator.html">🇺🇸 United States</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="intro" aria-labelledby="pageTitle">
+            <p class="eyebrow">UK lottery tools</p>
+            <h1 id="pageTitle">UK Lottery Number Generator</h1>
+            <p>Generate a random line for popular UK draw games. Choose a game below to see its number ranges and create a ticket combination.</p>
+        </section>
+
+        <div class="workspace">
+            <nav class="card game-nav" aria-label="Choose a UK lottery game">
+                <h2>Choose a game</h2>
+                <p>Pick a game to get started.</p>
+                <div class="game-menu" id="gameMenu">
+                    <button type="button" class="game-item active" data-game="euromillions" aria-pressed="true">EuroMillions</button>
+                    <button type="button" class="game-item" data-game="lotto" aria-pressed="false">Lotto</button>
+                    <button type="button" class="game-item" data-game="thunderball" aria-pressed="false">Thunderball</button>
+                    <button type="button" class="game-item" data-game="setforlife" aria-pressed="false">Set For Life</button>
+                    <button type="button" class="game-item" data-game="euromillionsHotpicks" aria-pressed="false">EuroMillions HotPicks</button>
+                    <button type="button" class="game-item" data-game="lottoHotpicks" aria-pressed="false">Lotto HotPicks</button>
+                </div>
+            </nav>
+
+            <section class="card generator" aria-labelledby="gameTitle">
+                <div class="generator-heading">
+                    <div>
+                        <p class="eyebrow">Random number tool</p>
+                        <h2 id="gameTitle">EuroMillions</h2>
+                        <p>Randomly generated numbers, ready in one click.</p>
+                    </div>
+                </div>
+                <p class="info-box" id="gameInfo" aria-live="polite"></p>
+
+                <div class="pick-count hidden" id="pickCountWrap">
+                    <label for="pickCount">Numbers to pick</label>
+                    <select id="pickCount">
+                        <option value="1">Pick 1</option>
+                        <option value="2">Pick 2</option>
+                        <option value="3">Pick 3</option>
+                        <option value="4">Pick 4</option>
+                        <option value="5" selected>Pick 5</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="action-button generate-button" id="generateButton">Generate numbers</button>
+                    <button type="button" class="action-button clear-button" id="clearButton">Clear tickets</button>
+                </div>
+
+                <section class="ticket" aria-label="Generated ticket numbers" aria-live="polite">
+                    <p class="ticket-label">Your numbers</p>
+                    <div class="number-section">
+                        <p class="section-label" id="mainLabel"></p>
+                        <div class="numbers-display" id="mainNumbers"></div>
+                    </div>
+                    <div class="number-section" id="bonusSection">
+                        <p class="section-label" id="bonusLabel"></p>
+                        <div class="numbers-display" id="bonusNumbers"></div>
+                    </div>
+                </section>
+
+                <section class="history" aria-labelledby="historyHeading">
+                    <h3 id="historyHeading">Recent tickets <span id="totalTickets">(0)</span></h3>
+                    <div class="history-list" id="historyList" aria-live="polite"></div>
+                </section>
+            </section>
+        </div>
+
+        <section class="card editorial" aria-labelledby="aboutHeading">
+            <h2 id="aboutHeading">About the UK lottery number generator</h2>
+            <p>Use this free tool to create random number combinations for EuroMillions, Lotto, Thunderball, Set For Life and HotPicks. Select a game to view the number ranges, then generate a line or clear the recent ticket list to start again.</p>
+            <p>Every combination is generated randomly for entertainment. This tool is not affiliated with or endorsed by the National Lottery or any lottery operator. It does not predict draw results or increase the odds of winning. Check official game rules and age requirements before playing, and play responsibly.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>For entertainment only. Random numbers cannot predict lottery results or improve the chance of winning.</p>
+    </footer>
+
+    <script>
+        const games = {
+            euromillions: {
+                name: 'EuroMillions',
+                mainCount: 5, mainMax: 50, mainLabel: 'Main numbers',
+                bonusCount: 2, bonusMax: 12, bonusLabel: 'Lucky Stars', bonusClass: 'bonus-ball',
+                instruction: 'Choose 5 main numbers from 1 to 50 and 2 Lucky Stars from 1 to 12.'
+            },
+            lotto: {
+                name: 'Lotto',
+                mainCount: 6, mainMax: 59, mainLabel: 'Main numbers',
+                bonusCount: 0,
+                instruction: 'Choose 6 numbers from 1 to 59. The bonus ball is drawn separately and is not selected on a ticket.'
+            },
+            thunderball: {
+                name: 'Thunderball',
+                mainCount: 5, mainMax: 39, mainLabel: 'Main numbers',
+                bonusCount: 1, bonusMax: 14, bonusLabel: 'Thunderball', bonusClass: 'bonus-ball',
+                instruction: 'Choose 5 main numbers from 1 to 39 and 1 Thunderball from 1 to 14.'
+            },
+            setforlife: {
+                name: 'Set For Life',
+                mainCount: 5, mainMax: 47, mainLabel: 'Main numbers',
+                bonusCount: 1, bonusMax: 10, bonusLabel: 'Life Ball', bonusClass: 'bonus-ball',
+                instruction: 'Choose 5 main numbers from 1 to 47 and 1 Life Ball from 1 to 10.'
+            },
+            euromillionsHotpicks: {
+                name: 'EuroMillions HotPicks',
+                mainCount: 5, mainMax: 50, mainLabel: 'Your picks',
+                bonusCount: 0, hotpicks: true,
+                instruction: 'Pick 1 to 5 numbers from 1 to 50. Your selected numbers must match numbers drawn in EuroMillions.'
+            },
+            lottoHotpicks: {
+                name: 'Lotto HotPicks',
+                mainCount: 5, mainMax: 59, mainLabel: 'Your picks',
+                bonusCount: 0, hotpicks: true,
+                instruction: 'Pick 1 to 5 numbers from 1 to 59. Your selected numbers must match numbers drawn in Lotto.'
+            }
+        };
+
+        let selectedGame = 'euromillions';
+        let ticketHistory = [];
+
+        function currentGame() {
+            const game = games[selectedGame];
+            return {
+                ...game,
+                mainCount: game.hotpicks ? Number(document.getElementById('pickCount').value) : game.mainCount
+            };
+        }
+
+        function addBalls(container, numbers, className) {
+            container.replaceChildren(...numbers.map(number => {
+                const ball = document.createElement('span');
+                ball.className = className;
+                ball.textContent = String(number);
+                return ball;
+            }));
+        }
+
+        function resetTicketDisplay(game) {
+            addBalls(document.getElementById('mainNumbers'), Array(game.mainCount).fill('?'), 'empty-ball');
+            addBalls(document.getElementById('bonusNumbers'), Array(game.bonusCount || 0).fill('?'), 'empty-ball');
+        }
+
+        function updateGame() {
+            const game = currentGame();
+            document.getElementById('gameTitle').textContent = game.name;
+            document.getElementById('gameInfo').textContent = game.instruction;
+            document.getElementById('mainLabel').textContent = `${game.mainLabel} (1-${game.mainMax})`;
+            document.getElementById('pickCountWrap').classList.toggle('hidden', !game.hotpicks);
+            document.getElementById('bonusSection').hidden = !game.bonusCount;
+            document.querySelectorAll('.game-item').forEach(button => {
+                const active = button.dataset.game === selectedGame;
+                button.classList.toggle('active', active);
+                button.setAttribute('aria-pressed', String(active));
+            });
+            if (game.bonusCount) {
+                document.getElementById('bonusLabel').textContent = `${game.bonusLabel} (1-${game.bonusMax})`;
+            }
+            document.title = `${game.name} Number Generator | Number Studio UK`;
+            resetTicketDisplay(game);
+        }
+
+        function generateUniqueNumbers(max, count) {
+            const range = Array.from({ length: max }, (_, index) => index + 1);
+            for (let index = 0; index < count; index++) {
+                const randomIndex = index + Math.floor(Math.random() * (range.length - index));
+                [range[index], range[randomIndex]] = [range[randomIndex], range[index]];
+            }
+            return range.slice(0, count);
+        }
+
+        function updateHistory() {
+            const historyList = document.getElementById('historyList');
+            document.getElementById('totalTickets').textContent = `(${ticketHistory.length})`;
+            if (!ticketHistory.length) {
+                const emptyMessage = document.createElement('p');
+                emptyMessage.className = 'history-empty';
+                emptyMessage.textContent = 'Your generated tickets will appear here.';
+                historyList.replaceChildren(emptyMessage);
+                return;
+            }
+
+            historyList.replaceChildren(...ticketHistory.map((item, index) => {
+                const entry = document.createElement('div');
+                entry.className = 'history-item';
+                const heading = document.createElement('strong');
+                heading.textContent = `#${index + 1} ${item.game}: `;
+                const numbers = document.createElement('span');
+                numbers.textContent = item.ticket;
+                const date = document.createElement('div');
+                date.className = 'history-date';
+                date.textContent = item.date;
+                entry.append(heading, numbers, date);
+                return entry;
+            }));
+        }
+
+        function generateTicket() {
+            const game = currentGame();
+            const mainNumbers = generateUniqueNumbers(game.mainMax, game.mainCount).sort((a, b) => a - b);
+            const bonusNumbers = game.bonusCount
+                ? generateUniqueNumbers(game.bonusMax, game.bonusCount).sort((a, b) => a - b)
+                : [];
+
+            addBalls(document.getElementById('mainNumbers'), mainNumbers, 'number-ball');
+            addBalls(document.getElementById('bonusNumbers'), bonusNumbers, game.bonusClass || 'bonus-ball');
+
+            const ticket = bonusNumbers.length
+                ? `${mainNumbers.join(', ')} | ${game.bonusLabel}: ${bonusNumbers.join(', ')}`
+                : mainNumbers.join(', ');
+            ticketHistory.unshift({ game: game.name, ticket, date: new Date().toLocaleString() });
+            ticketHistory = ticketHistory.slice(0, 10);
+            updateHistory();
+        }
+
+        function clearTickets() {
+            ticketHistory = [];
+            resetTicketDisplay(currentGame());
+            updateHistory();
+        }
+
+        document.querySelectorAll('.game-item').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedGame = button.dataset.game;
+                updateGame();
+            });
+        });
+        document.getElementById('pickCount').addEventListener('change', updateGame);
+        document.getElementById('generateButton').addEventListener('click', generateTicket);
+        document.getElementById('clearButton').addEventListener('click', clearTickets);
+        document.getElementById('countrySelect').addEventListener('change', event => {
+            window.location.href = event.target.value;
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Enter' && event.target.tagName !== 'BUTTON' && event.target.tagName !== 'SELECT') {
+                generateTicket();
+            }
+        });
+
+        updateHistory();
+        updateGame();
+    </script>
+</body>
+</html>
