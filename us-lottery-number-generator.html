@@ -251,6 +251,39 @@
         }
         .history-item strong { color: var(--ink); }
         .history-date { color: var(--muted); font-size: 11px; }
+        .history-ticket-heading {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .history-numbers {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .history-number-ball,
+        .history-bonus-ball {
+            display: grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 750;
+        }
+        .history-number-ball {
+            border: 1px solid #d9e2ec;
+            background: white;
+            color: var(--ink);
+        }
+        .history-bonus-ball {
+            background: var(--brand);
+            color: white;
+        }
+        .history-bonus-divider {
+            color: #829ab1;
+            font-size: 14px;
+        }
 
         .editorial { margin-top: 24px; padding: clamp(20px, 3vw, 30px); }
         .editorial h2 { margin-bottom: 8px; font-size: 20px; letter-spacing: -0.025em; }
@@ -454,9 +487,26 @@
                 const entry = document.createElement('div');
                 entry.className = 'history-item';
                 const heading = document.createElement('strong');
-                heading.textContent = `#${index + 1} ${item.game}: `;
-                const numbers = document.createElement('span');
-                numbers.textContent = item.ticket;
+                heading.className = 'history-ticket-heading';
+                heading.textContent = `#${index + 1} ${item.game}`;
+                const numbers = document.createElement('div');
+                numbers.className = 'history-numbers';
+                item.mainNumbers.forEach(number => {
+                    const ball = document.createElement('span');
+                    ball.className = 'history-number-ball';
+                    ball.textContent = String(number);
+                    numbers.appendChild(ball);
+                });
+                const divider = document.createElement('span');
+                divider.className = 'history-bonus-divider';
+                divider.textContent = '|';
+                divider.setAttribute('aria-hidden', 'true');
+                numbers.appendChild(divider);
+                const bonusBall = document.createElement('span');
+                bonusBall.className = 'history-bonus-ball';
+                bonusBall.textContent = String(item.bonusNumber);
+                bonusBall.title = item.bonusLabel;
+                numbers.appendChild(bonusBall);
                 const date = document.createElement('div');
                 date.className = 'history-date';
                 date.textContent = item.date;
@@ -474,7 +524,9 @@
 
             ticketHistory.unshift({
                 game: game.name,
-                ticket: `${mainNumbers.join(', ')} | ${game.bonusLabel}: ${bonusNumber}`,
+                mainNumbers,
+                bonusNumber,
+                bonusLabel: game.bonusLabel,
                 date: new Date().toLocaleString()
             });
             ticketHistory = ticketHistory.slice(0, 10);
